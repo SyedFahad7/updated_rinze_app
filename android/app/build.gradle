@@ -1,0 +1,79 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin" // Ensure this plugin is applied correctly
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader("UTF-8") { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
+if (flutterVersionCode == null) {
+    flutterVersionCode = "1"
+}
+flutterVersionCode = "2"
+
+def flutterVersionName = localProperties.getProperty("flutter.versionName")
+if (flutterVersionName == null) {
+    flutterVersionName = "1.0"
+}
+flutterVersionName = "Closed Testing"
+
+android {
+    namespace = "com.rinze.laundry"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8" // This ensures that Kotlin uses JVM 1.8 compatibility
+    }
+
+    defaultConfig {
+        applicationId = "com.rinze.laundry"
+        minSdk = 21
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            // Path to your keystore file
+            storeFile file('rinze-key.jks')
+            storePassword 'xunoia001@'  // Replace with your keystore password
+            keyAlias 'rinzeKey'                   // Replace with your key alias
+            keyPassword 'xunoia001@'     // Replace with your key password
+        }
+    }
+
+    buildTypes {
+        release {
+            // Ensure you have proper signing configurations here if needed
+            signingConfig = signingConfigs.release // Replace with a release signing config when needed
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
+        }
+    }
+}
+
+flutter {
+    source = "../.." // Ensure this path is correct based on your project structure
+}
+
+//dependencies {
+//    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+//    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
+//}
