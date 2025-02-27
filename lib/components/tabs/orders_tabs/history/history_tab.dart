@@ -7,6 +7,7 @@ import 'package:rinze/components/history_order_card.dart';
 import 'package:rinze/components/loading_animation.dart';
 import 'package:rinze/constants/app_colors.dart';
 import 'package:rinze/constants/app_fonts.dart';
+import 'package:rinze/screens/home_navigation_screen.dart';
 import 'package:rinze/screens/main/services_screen.dart';
 
 import '../../../../main.dart';
@@ -95,28 +96,37 @@ class _HistoryTabScreenState extends State<HistoryTabScreen> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
+                // selectedIndex = 3;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const ServicesScreen()),
+                    builder: (context) => const HomeBottomNavigation(
+                      selectedIndex: 1,
+                    ),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.baseWhite, // Button color
-                minimumSize: const Size(150, 50), // Width and height
+                backgroundColor: AppColors.halfWhite,
+                elevation: 0.0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // Border radius
-                ),
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: AppColors.black.withOpacity(0.06),
+                      width: 1.0,
+                    )),
+                padding: const EdgeInsets.all(12.0),
               ),
               child: const Text(
                 'Place an Order',
                 style: TextStyle(
-                  color: AppColors.darkBlue,
-                  fontSize: AppFonts.fontSize14,
-                  fontWeight: AppFonts.fontWeightMedium,
+                  color: AppColors.darkerBlue,
+                  fontFamily: AppFonts.fontFamilyPlusJakartaSans,
+                  fontSize: AppFonts.fontSize16,
+                  fontWeight: AppFonts.fontWeightSemiBold,
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
