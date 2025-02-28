@@ -90,6 +90,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   bool _showMarketingMessage = true;
 
+  ScrollController _scrollController = ScrollController();
+  double _leftPadding = 16.0;
+
   Future<void> fetchUserData() async {
     String? storedToken = await secureStorage.read(key: 'Rin8k1H2mZ');
 
@@ -132,8 +135,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    // Initialize dependencies
     fetchServicesData();
     fetchUserData();
     fetchProductData();
@@ -157,6 +158,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         curve: Curves.easeInOut,
       ),
     );
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 0) {
+        setState(() {
+          _leftPadding = 0.0;
+        });
+      } else {
+        setState(() {
+          _leftPadding = 16.0;
+        });
+      }
+    });
 
     _revealController = AnimationController(
       vsync: this,
@@ -299,6 +311,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _focusNode.dispose();
     _pageController.dispose();
     _revealController.dispose();
+    _scrollController.dispose();
     _searchController.dispose();
     _placeholderTimer.cancel(); // Dispose of the placeholder timer
     super.dispose();
@@ -582,9 +595,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Consumer<CustomerGlobalState>(
                               builder: (context, customerProvider, child) {
                                 final userData = customerProvider.userData;
-                                final profileImageUrl =
-                                    userData['profileImg'] ??
-                                        'https://placehold.co/100x100';
+                                final profileImageUrl = userData[
+                                        'profileImg'] ??
+                                    'https://cdn-icons-png.flaticon.com/128/1077/1077063.png';
                                 return CircleAvatar(
                                   backgroundImage:
                                       NetworkImage(profileImageUrl),
@@ -986,12 +999,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     SizedBox(
                       height: 150.0,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: EdgeInsets.only(left: _leftPadding),
                         child: isLoading
                             ? Shimmer.fromColors(
                                 baseColor: Colors.grey[300]!,
                                 highlightColor: Colors.grey[100]!,
                                 child: ListView.builder(
+                                  controller: _scrollController,
                                   itemCount: 5,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
@@ -1009,6 +1023,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                               )
                             : ListView.builder(
+                                controller: _scrollController,
                                 itemCount: services.length,
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
@@ -1147,84 +1162,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                               isTraditional: true,
                                               isKids: false,
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  } else if (categoryData['title'] == 'kids') {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 16.0),
-                                          decoration: const BoxDecoration(
-                                            color: AppColors.lightGreen,
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 12.0,
-                                                  horizontal: 24.0,
-                                                ),
-                                                width: double.infinity,
-                                                child: Image.asset(
-                                                  'assets/images/kids_banner.png',
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 16),
-                                                child: HomeCategorySection(
-                                                  category: capitalize(
-                                                      '${categoryData['title']} categories'), // Keep it in small letters
-                                                  sections:
-                                                      List<SectionItem>.from(
-                                                    categoryData['products']
-                                                        .map<SectionItem>(
-                                                            (product) {
-                                                      return SectionItem(
-                                                        imagePath: product[
-                                                            'image_url'],
-                                                        title: capitalize(
-                                                            product[
-                                                                'product_name']),
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  LaundryItemScreen(
-                                                                category:
-                                                                    categoryData[
-                                                                        'title'],
-                                                                imagePath: product[
-                                                                    'image_url'],
-                                                                itemName:
-                                                                    capitalize(
-                                                                        product[
-                                                                            'product_name']),
-                                                                productId:
-                                                                    product[
-                                                                        '_id'],
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        isTraditional: false,
-                                                        isKids: true,
-                                                      );
-                                                    }),
-                                                  ),
-                                                  isTraditional: false,
-                                                  isKids: true,
-                                                ),
-                                              ),
-                                            ],
                                           ),
                                         ),
                                       ],

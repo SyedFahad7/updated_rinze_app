@@ -213,193 +213,190 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen>
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: isLoading
-            ? const LoadingAnimation()
-            : CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Stack(
-                      children: [
-                        Container(
-                          color: AppColors.halfWhite,
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16.0,
-                            horizontal: 24.0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 16.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/icons/arrow_left.svg',
-                                          ),
-                                          const Text(
-                                            'Back',
-                                            style: TextStyle(
-                                              color: AppColors.black,
-                                              fontFamily: AppFonts
-                                                  .fontFamilyPlusJakartaSans,
-                                              fontSize: AppFonts.fontSize14,
-                                              fontWeight:
-                                                  AppFonts.fontWeightRegular,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4.0),
-                                  Text(
-                                    formatStringToMultiline(widget.serviceName),
-                                    style: const TextStyle(
-                                      color: AppColors.darkBlue,
-                                      fontFamily:
-                                          AppFonts.fontFamilyPlusJakartaSans,
-                                      fontSize: AppFonts.fontSize28,
-                                      fontWeight: AppFonts.fontWeightSemiBold,
-                                    ),
-                                    softWrap: true,
-                                    overflow: TextOverflow.fade,
-                                  ),
-                                ],
-                              ),
-                              Image.network(
-                                widget.imagePath,
-                                scale: 0.6,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 2.0,
-                          right: 24.0,
-                          left: 24.0,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Container(
-                                height: 50,
-                                color: AppColors.baseBlack.withOpacity(0.35),
-                                child: TabBar(
-                                  isScrollable: true,
-                                  padding: const EdgeInsets.all(4.0),
-                                  dividerColor: AppColors.transparent,
-                                  unselectedLabelColor: AppColors.white,
-                                  unselectedLabelStyle: const TextStyle(
-                                    fontFamily:
-                                        AppFonts.fontFamilyPlusJakartaSans,
-                                    fontSize: AppFonts.fontSize14,
-                                    fontWeight: AppFonts.fontWeightSemiBold,
-                                  ),
-                                  labelColor: AppColors.darkBlue,
-                                  labelStyle: const TextStyle(
-                                    fontFamily:
-                                        AppFonts.fontFamilyPlusJakartaSans,
-                                    fontSize: AppFonts.fontSize14,
-                                    fontWeight: AppFonts.fontWeightSemiBold,
-                                  ),
-                                  indicator: const BoxDecoration(
-                                    color: AppColors.baseWhite,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5.0),
-                                    ),
-                                  ),
-                                  indicatorSize: TabBarIndicatorSize.tab,
-                                  indicatorColor: Colors.transparent,
-                                  controller: _tabController,
-                                  tabs: [
-                                    for (var category in laundryItems.keys)
-                                      Tab(
-                                        text: capitalize(category.trim()),
-                                      )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Stack(
+                    children: [
                       Container(
-                        padding: const EdgeInsets.all(24.0),
-                        height: MediaQuery.of(context).size.height - 300,
-                        child: TabBarView(
-                          controller: _tabController,
+                        color: AppColors.halfWhite,
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16.0,
+                          horizontal: 24.0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            for (var category in laundryItems.keys)
-                              LaundryTab(
-                                serviceName: widget.serviceName,
-                                serviceId: widget.serviceId,
-                                laundryPerPiece: laundryPerPiece,
-                                laundryByKg: laundryByKg,
-                                category: category,
-                                products: laundryItems[category] ?? [],
-                                globalProducts: globalProducts,
-                                onUpdateTotal: updateTotal,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/arrow_left.svg',
+                                        ),
+                                        const Text(
+                                          'Back',
+                                          style: TextStyle(
+                                            color: AppColors.black,
+                                            fontFamily: AppFonts
+                                                .fontFamilyPlusJakartaSans,
+                                            fontSize: AppFonts.fontSize14,
+                                            fontWeight:
+                                                AppFonts.fontWeightRegular,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4.0),
+                                Text(
+                                  formatStringToMultiline(widget.serviceName),
+                                  style: const TextStyle(
+                                    color: AppColors.darkBlue,
+                                    fontFamily:
+                                        AppFonts.fontFamilyPlusJakartaSans,
+                                    fontSize: AppFonts.fontSize28,
+                                    fontWeight: AppFonts.fontWeightSemiBold,
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              ],
+                            ),
+                            Image.network(
+                              widget.imagePath,
+                              scale: 0.6,
+                            ),
                           ],
                         ),
                       ),
-                      if (basketProducts.isNotEmpty)
-                        Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(
-                            left: 24.0,
-                            right: 24.0,
-                            bottom: 24.0,
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const HomeBottomNavigation(
-                                          selectedIndex: 3),
+                      Positioned(
+                        bottom: 2.0,
+                        right: 24.0,
+                        left: 24.0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Container(
+                              height: 50,
+                              color: AppColors.baseBlack.withOpacity(0.35),
+                              child: TabBar(
+                                isScrollable: true,
+                                padding: const EdgeInsets.all(4.0),
+                                dividerColor: AppColors.transparent,
+                                unselectedLabelColor: AppColors.white,
+                                unselectedLabelStyle: const TextStyle(
+                                  fontFamily:
+                                      AppFonts.fontFamilyPlusJakartaSans,
+                                  fontSize: AppFonts.fontSize14,
+                                  fontWeight: AppFonts.fontWeightSemiBold,
                                 ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                              backgroundColor: AppColors.darkBlue,
-                              elevation: 0.0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            child: const Text(
-                              'View Basket',
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontFamily: AppFonts.fontFamilyPlusJakartaSans,
-                                fontSize: AppFonts.fontSize16,
-                                fontWeight: AppFonts.fontWeightSemiBold,
+                                labelColor: AppColors.darkBlue,
+                                labelStyle: const TextStyle(
+                                  fontFamily:
+                                      AppFonts.fontFamilyPlusJakartaSans,
+                                  fontSize: AppFonts.fontSize14,
+                                  fontWeight: AppFonts.fontWeightSemiBold,
+                                ),
+                                indicator: const BoxDecoration(
+                                  color: AppColors.baseWhite,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5.0),
+                                  ),
+                                ),
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                indicatorColor: Colors.transparent,
+                                controller: _tabController,
+                                tabs: [
+                                  for (var category in laundryItems.keys)
+                                    Tab(
+                                      text: capitalize(category.trim()),
+                                    )
+                                ],
                               ),
                             ),
                           ),
                         ),
-                    ]),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Container(
+                      padding: const EdgeInsets.all(24.0),
+                      height: MediaQuery.of(context).size.height - 300,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          for (var category in laundryItems.keys)
+                            LaundryTab(
+                              serviceName: widget.serviceName,
+                              serviceId: widget.serviceId,
+                              laundryPerPiece: laundryPerPiece,
+                              laundryByKg: laundryByKg,
+                              category: category,
+                              products: laundryItems[category] ?? [],
+                              globalProducts: globalProducts,
+                              onUpdateTotal: updateTotal,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+            if (basketProducts.isNotEmpty)
+              Positioned(
+                bottom: 16.0,
+                left: 24.0,
+                right: 24.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const HomeBottomNavigation(selectedIndex: 3),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    backgroundColor: AppColors.darkBlue,
+                    elevation: 0.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'View Basket',
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontFamily: AppFonts.fontFamilyPlusJakartaSans,
+                      fontSize: AppFonts.fontSize16,
+                      fontWeight: AppFonts.fontWeightSemiBold,
+                    ),
+                  ),
+                ),
               ),
+          ],
+        ),
       ),
     );
   }

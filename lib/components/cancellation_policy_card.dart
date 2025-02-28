@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:rinze/screens/profile/about_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_fonts.dart';
 
 class CancellationPolicyCard extends StatelessWidget {
   const CancellationPolicyCard({super.key});
+
+  Future<void> _launchURL() async {
+    const url = 'https://rinzelaundry.com/terms-conditions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +28,12 @@ class CancellationPolicyCard extends StatelessWidget {
           Radius.circular(10.0),
         ),
         border: Border.all(
-          color: AppColors.black.withValues(alpha: 0.06),
+          color: AppColors.black.withOpacity(0.06),
           width: 1.0,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
+            color: AppColors.black.withOpacity(0.1),
             offset: const Offset(0, 1),
             blurRadius: 8.0,
             spreadRadius: 0.5,
@@ -80,14 +89,7 @@ class CancellationPolicyCard extends StatelessWidget {
           ),
           const SizedBox(height: 24.0),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AboutScreen(),
-                ),
-              );
-            },
+            onTap: _launchURL,
             child: Row(
               children: [
                 const Text(
