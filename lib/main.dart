@@ -54,9 +54,6 @@ Future<void> main() async {
   // Request Notification Permissions
   await _requestNotificationPermissions();
 
-  // Request Storage Permissions
-  await _requestStoragePermissions();
-
   runApp(RinzeLaundryApp(
     token: token,
   ));
@@ -76,36 +73,6 @@ Future<void> _requestNotificationPermissions() async {
         badge: true,
         sound: true,
       );
-}
-
-// Request Storage Permissions
-Future<void> _requestStoragePermissions() async {
-  final status = await Permission.storage.status;
-  print('Storage permission status: $status');
-
-  if (status.isDenied) {
-    final result = await Permission.storage.request();
-    print('Storage permission request result: $result');
-
-    if (result.isPermanentlyDenied) {
-      // Open app settings
-      await openAppSettings();
-    }
-  }
-
-  // For Android 11 and above
-  final manageStatus = await Permission.manageExternalStorage.status;
-  print('Manage External Storage permission status: $manageStatus');
-
-  if (manageStatus.isDenied) {
-    final manageResult = await Permission.manageExternalStorage.request();
-    print('Manage External Storage permission request result: $manageResult');
-
-    if (manageResult.isPermanentlyDenied) {
-      // Open app settings
-      await openAppSettings();
-    }
-  }
 }
 
 class RinzeLaundryApp extends StatelessWidget {

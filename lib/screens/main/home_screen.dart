@@ -502,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Image.asset(
                   'assets/images/sun.png',
                   // width: 100,
-                  opacity: AlwaysStoppedAnimation(0.7),
+                  opacity: const AlwaysStoppedAnimation(0.7),
                 ),
               );
             },
@@ -871,17 +871,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  height: 400.0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Image.asset(
-                                    'assets/images/winter_banner.png',
-                                    fit: screenWidth > 1080
-                                        ? BoxFit.contain
-                                        : BoxFit.fill,
-                                  ),
-                                ),
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(
@@ -915,10 +904,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           const SizedBox(height: 8.0),
                           SmoothPageIndicator(
                             controller: _pageController,
-                            count: 4,
+                            count: 3,
                             effect: const ExpandingDotsEffect(
-                              dotHeight: 8.0,
-                              dotWidth: 8.0,
+                              dotHeight: 10.0,
+                              dotWidth: 10.0,
                               activeDotColor: AppColors.darkBlue,
                               dotColor: AppColors.iconGrey,
                               expansionFactor: 3,
@@ -1120,8 +1109,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 AppColors.traditionalGradient,
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 16.0),
+                                            padding:
+                                                const EdgeInsets.only(left: 16),
                                             child: HomeCategorySection(
                                               category: capitalize(
                                                   '${categoryData['title']}\'s categories'),
@@ -1166,10 +1155,87 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         ),
                                       ],
                                     );
+                                  } else if (categoryData['title'] == 'kids') {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              bottom: 16.0),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.transparent,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 12.0,
+                                                  horizontal: 24.0,
+                                                ),
+                                                width: double.infinity,
+                                                child: Image.asset(
+                                                  'assets/images/kids_banner_2.png',
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16),
+                                                child: HomeCategorySection(
+                                                  category: capitalize(
+                                                      '${categoryData['title']} categories'), // Keep it in small letters
+                                                  sections:
+                                                      List<SectionItem>.from(
+                                                    categoryData['products']
+                                                        .map<SectionItem>(
+                                                            (product) {
+                                                      return SectionItem(
+                                                        imagePath: product[
+                                                            'image_url'],
+                                                        title: capitalize(
+                                                            product[
+                                                                'product_name']),
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LaundryItemScreen(
+                                                                category:
+                                                                    categoryData[
+                                                                        'title'],
+                                                                imagePath: product[
+                                                                    'image_url'],
+                                                                itemName:
+                                                                    capitalize(
+                                                                        product[
+                                                                            'product_name']),
+                                                                productId:
+                                                                    product[
+                                                                        '_id'],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        isTraditional: false,
+                                                        isKids: true,
+                                                      );
+                                                    }),
+                                                  ),
+                                                  isTraditional: false,
+                                                  isKids: true,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
                                   } else {
                                     return Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 16.0),
+                                      padding: const EdgeInsets.only(left: 16),
                                       child: HomeCategorySection(
                                         category: capitalize(
                                             '${categoryData['title']}\'s categories'),
@@ -1327,9 +1393,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           width: 16.0,
                                           height: 16.0,
                                         ),
-                                        const SizedBox(width: 1.0),
+                                        const SizedBox(width: 4.0),
                                         const Text(
-                                          "UNOIA",
+                                          "XUNOIA",
                                           style: TextStyle(
                                             fontSize: AppFonts.fontSize16,
                                             fontFamily: AppFonts

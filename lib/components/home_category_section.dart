@@ -54,7 +54,7 @@ class _HomeCategorySectionState extends State<HomeCategorySection> {
           ),
         ] else ...[
           Padding(
-            padding: const EdgeInsets.only(left: 0.0), // Add left padding here
+            padding: const EdgeInsets.only(left: 0.0),
             child: Text(
               widget.category,
               style: const TextStyle(

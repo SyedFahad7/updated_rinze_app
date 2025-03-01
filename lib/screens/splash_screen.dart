@@ -140,9 +140,9 @@ class SplashScreenState extends State<SplashScreen>
                           width: 16.0,
                           height: 16.0,
                         ),
-                        const SizedBox(width: 2.0),
+                        const SizedBox(width: 4.0),
                         const Text(
-                          "UNOIA",
+                          "XUNOIA",
                           style: TextStyle(
                             fontSize: AppFonts.fontSize16,
                             fontFamily: AppFonts.fontFamilyPlusJakartaSans,

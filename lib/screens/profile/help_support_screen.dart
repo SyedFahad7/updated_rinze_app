@@ -65,7 +65,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                 Text(
                   "Let's take a step ahead & help you better",
                   style: TextStyle(
-                    color: AppColors.black.withValues(alpha: 0.6),
+                    color: AppColors.black.withOpacity(0.6),
                     fontFamily: AppFonts.fontFamilyPlusJakartaSans,
                     fontSize: AppFonts.fontSize16,
                     fontWeight: AppFonts.fontWeightRegular,
@@ -91,7 +91,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                         Text(
                           '+910000000000',
                           style: TextStyle(
-                            color: AppColors.black.withValues(alpha: 0.6),
+                            color: AppColors.black.withOpacity(0.6),
                             fontFamily: AppFonts.fontFamilyPlusJakartaSans,
                             fontSize: AppFonts.fontSize14,
                             fontWeight: AppFonts.fontWeightRegular,
@@ -121,7 +121,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                         Text(
                           'rinzelaudry@gmail.com',
                           style: TextStyle(
-                            color: AppColors.black.withValues(alpha: 0.6),
+                            color: AppColors.black.withOpacity(0.6),
                             fontFamily: AppFonts.fontFamilyPlusJakartaSans,
                             fontSize: AppFonts.fontSize14,
                             fontWeight: AppFonts.fontWeightRegular,
@@ -203,19 +203,17 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                     ),
                   ),
                 ),
-                SvgPicture.asset(
+                Image.asset(
                   _isOpen[index]
-                      ? 'assets/icons/arrow_up.svg'
-                      : 'assets/icons/arrow_down.svg',
-                  colorFilter: const ColorFilter.mode(
-                    AppColors.black,
-                    BlendMode.srcIn,
-                  ),
+                      ? 'assets/images/arrow_up.png'
+                      : 'assets/images/arrow_down.png',
+                  width: 16,
                 ),
               ],
             ),
-            if (_isOpen[index])
-              Padding(
+            AnimatedCrossFade(
+              firstChild: Container(),
+              secondChild: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   answer,
@@ -227,6 +225,11 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                   ),
                 ),
               ),
+              crossFadeState: _isOpen[index]
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              duration: const Duration(milliseconds: 300),
+            ),
           ],
         ),
       ),

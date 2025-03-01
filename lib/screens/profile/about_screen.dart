@@ -145,15 +145,16 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                   const SizedBox(width: 4),
                   Padding(
-                    padding: const EdgeInsets.only(top: 6.0),
+                    padding: const EdgeInsets.only(top: 2.0),
                     child: Image.asset(
                       'assets/images/xunoia.png',
                       height: 22,
                       width: 22,
                     ),
                   ),
+                  const SizedBox(width: 4),
                   const Text(
-                    'unoia',
+                    'Xunoia',
                     style: TextStyle(
                       color: AppColors.darkBlue,
                       fontFamily: AppFonts.fontFamilyPlusJakartaSans,

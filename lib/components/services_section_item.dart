@@ -33,10 +33,6 @@ class ServiceSectionItem extends StatelessWidget {
               height: 50.0,
               decoration: const BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.0),
-                  bottomRight: Radius.circular(12.0),
-                ),
               ),
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

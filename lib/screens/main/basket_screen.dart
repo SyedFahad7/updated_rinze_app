@@ -61,7 +61,7 @@ class _BasketScreenState extends State<BasketScreen> {
   double totalCost = 0.0;
   Map<String, dynamic> notes = {};
   String transactionId = '';
-
+  bool _isLoading = false;
   bool _isModalOpen = false;
 
   final Map<String, int> pickupCharges = {
@@ -133,6 +133,10 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Future<void> payOnDelivery() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       String paymentUrl = '${dotenv.env['API_URL']}/payments/draft';
       String? storedToken = await secureStorage.read(key: 'Rin8k1H2mZ');
@@ -161,7 +165,6 @@ class _BasketScreenState extends State<BasketScreen> {
         );
 
         if (response.statusCode == 200) {
-          // Parse the JSON data
           final data = json.decode(response.body);
           setState(() {
             transactionId = data['transaction']['_id'];
@@ -181,6 +184,10 @@ class _BasketScreenState extends State<BasketScreen> {
       if (kDebugMode) {
         print('Error occurred while fetching data: $error');
       }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -254,6 +261,10 @@ class _BasketScreenState extends State<BasketScreen> {
   }
 
   Future<void> payOnline() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     if (_selectedPaymentMethod == 'online') {
       try {
         String razorpayUrl = '${dotenv.env['API_URL']}/razorpay/create';
@@ -291,7 +302,6 @@ class _BasketScreenState extends State<BasketScreen> {
           );
 
           if (response.statusCode == 201) {
-            // Parse the JSON data
             final data = json.decode(response.body);
             if (kDebugMode) {
               print('Button not clicked,,,,,,,,,,,,,,');
@@ -315,6 +325,10 @@ class _BasketScreenState extends State<BasketScreen> {
         if (kDebugMode) {
           print('Error occurred while fetching data: $error');
         }
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -1593,6 +1607,11 @@ class _BasketScreenState extends State<BasketScreen> {
                                   ),
                                 ),
                               ),
+                            ),
+                          if (_isLoading)
+                            const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.white),
                             ),
                         ],
                       ),

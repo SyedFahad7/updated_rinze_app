@@ -49,10 +49,6 @@
     <string>We need your permission to save photos.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>We need your permission to access photos.</string>
-    <key>NSDocumentsFolderUsageDescription</key>
-    <string>We need access to your documents folder to save and share invoices.</string>
-    <key>NSDownloadsFolderUsageDescription</key>
-    <string>We need access to your downloads folder to save invoices.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>We need your location for delivery purposes.</string>
     <key>NSLocationAlwaysUsageDescription</key>

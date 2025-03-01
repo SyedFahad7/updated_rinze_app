@@ -46,13 +46,6 @@ class _LaundryTabState extends State<LaundryTab> {
 
   late String updatedKg;
 
-  // State to store the weight of each product
-  Map<String, double> productWeights = {
-    'shirt': 0.3, // Example weight in kg
-    'Jean': 0.5, // Example weight in kg
-    // Add more products and their weights here
-  };
-
   // State to track the quantity of each product
   Map<String, int> productQuantities = {};
 
