@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rinze/components/review_feedback.dart';
+import 'package:rinze/providers/order_status_provider.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../utils/string_utils.dart';
 import '../../../order_timeline_tile.dart';
@@ -56,21 +59,22 @@ class _ActiveOrderTrackingTabState extends State<ActiveOrderTrackingTab> {
 
   @override
   void initState() {
-    print("hello world");
     super.initState();
-    backendStatuses = widget.orderStatuses;
-  }
-
-  // Call this method whenever backendStatuses changes
-  void updateStatuses(List<dynamic> newStatuses) {
-    setState(() {
-      backendStatuses = newStatuses;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final orderStatusProvider =
+          Provider.of<OrderStatusProvider>(context, listen: false);
+      orderStatusProvider.setOrderStatuses(widget.orderStatuses);
+      orderStatusProvider.setCurrentStatus(widget.currentStatus);
+      setState(() {
+        backendStatuses = widget.orderStatuses;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    backendStatuses = widget.orderStatuses;
+    final orderStatusProvider = Provider.of<OrderStatusProvider>(context);
+    backendStatuses = orderStatusProvider.orderStatuses;
 
     // Generate service-related statuses dynamically
     final serviceStatuses = _generateServiceStatuses(widget.serviceTitles);
@@ -84,7 +88,19 @@ class _ActiveOrderTrackingTabState extends State<ActiveOrderTrackingTab> {
 
     print("All Statuses: $allStatuses");
 
-    final currentStatusIndex = allStatuses.indexOf(widget.currentStatus);
+    final currentStatusIndex =
+        allStatuses.indexOf(orderStatusProvider.currentStatus);
+
+    // Trigger ReviewFeedback screen if the current status is "delivered"
+    if (orderStatusProvider.currentStatus == 'delivered') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print("delivered");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ReviewFeedback()),
+        );
+      });
+    }
 
     return SafeArea(
       child: Padding(
@@ -141,6 +157,21 @@ class _ActiveOrderTrackingTabState extends State<ActiveOrderTrackingTab> {
                   break;
                 case 'delivered':
                   imagePath = 'assets/images/delivered.png';
+                  break;
+                case 'inWashing':
+                  imagePath = 'assets/images/in_washing.png';
+                  break;
+                case 'inIroning':
+                  imagePath = 'assets/images/in_ironing.png';
+                  break;
+                case 'inWashing&Ironing':
+                  imagePath = 'assets/images/in_washing_and_ironing.png';
+                  break;
+                case 'inDryCleaning':
+                  imagePath = 'assets/images/in_dry_cleaning.png';
+                  break;
+                case 'inDeepCleaning':
+                  imagePath = 'assets/images/in_deep_cleaning.png';
                   break;
                 default:
                   imagePath = 'assets/images/default_status.png';

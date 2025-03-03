@@ -30,6 +30,7 @@ import '../../providers/service_provider.dart';
 import '../../utils/string_utils.dart';
 import 'package:rinze/components/schedule_pickup_bottom_sheet.dart';
 import '../home_navigation_screen.dart';
+import '../../providers/order_provider.dart';
 
 class BasketScreen extends StatefulWidget {
   const BasketScreen({super.key});
@@ -700,6 +701,8 @@ class _BasketScreenState extends State<BasketScreen> {
         Provider.of<SGlobalState>(context, listen: false).basketProducts;
     final couponGlobalState =
         Provider.of<CouponsGlobalState>(context, listen: false);
+    final orderProvider = Provider.of<OrderProvider>(context,
+        listen: false); // Access the OrderProvider
 
     try {
       String? storedToken = await secureStorage.read(key: 'Rin8k1H2mZ');
@@ -715,11 +718,12 @@ class _BasketScreenState extends State<BasketScreen> {
         );
 
         if (response.statusCode == 201) {
-          // Parse the JSON data
           final data = json.decode(response.body);
           if (kDebugMode) {
             print('Created order successfully: $data');
           }
+
+          orderProvider.setOrderId(data['order']['_id']);
 
           Navigator.push(
             context,

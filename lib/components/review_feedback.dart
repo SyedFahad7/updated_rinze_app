@@ -1,7 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:rinze/constants/app_fonts.dart';
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:rinze/providers/order_provider.dart';
 
 import '../constants/app_colors.dart';
 
@@ -13,14 +21,44 @@ class ReviewFeedback extends StatefulWidget {
 }
 
 class _ReviewFeedbackState extends State<ReviewFeedback> {
-  double _rating = 0.0; // To store the star rating
-  final TextEditingController _feedbackController =
-      TextEditingController(); // To store the feedback text
+  double _rating = 0.0;
+  final TextEditingController _feedbackController = TextEditingController();
+  final secureStorage = const FlutterSecureStorage();
 
   @override
   void dispose() {
-    _feedbackController.dispose(); // Dispose the controller
+    _feedbackController.dispose();
     super.dispose();
+  }
+
+  Future<void> _submitReview() async {
+    final String? storedToken = await secureStorage.read(key: 'Rin8k1H2mZ');
+    final String url = '${dotenv.env['API_URL']}/rating/create';
+    final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    print('Order ID: ${orderProvider.orderId}');
+
+    if (storedToken != null) {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $storedToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'rating': _rating,
+          'feedback': _feedbackController.text,
+          'order': orderProvider.orderId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Review submitted successfully');
+      } else {
+        print('Failed to submit review: ${response.statusCode}');
+      }
+    } else {
+      print('Token not found');
+    }
   }
 
   @override
@@ -168,12 +206,8 @@ class _ReviewFeedbackState extends State<ReviewFeedback> {
                               width: 124,
                               height: 40,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  final feedback = {
-                                    'rating': _rating,
-                                    'feedback': _feedbackController.text,
-                                  };
-                                  print('Feedback: $feedback'); // For debugging
+                                onPressed: () async {
+                                  await _submitReview();
                                   Navigator.pop(context);
                                 },
                                 style: ElevatedButton.styleFrom(

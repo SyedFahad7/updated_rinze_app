@@ -7,6 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rinze/providers/addresses_provider.dart';
 import 'package:rinze/providers/coupons_provider.dart';
+import 'package:rinze/providers/order_provider.dart';
+import 'package:rinze/providers/order_status_provider.dart';
 import 'package:rinze/providers/service_provider.dart';
 import 'package:rinze/providers/customer_provider.dart';
 import 'package:rinze/routes.dart';
@@ -85,6 +87,8 @@ class RinzeLaundryApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SGlobalState()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (context) => OrderStatusProvider()),
         ChangeNotifierProvider(create: (context) => AddressesGlobalState()),
         ChangeNotifierProvider(create: (context) => CouponsGlobalState()),
         ChangeNotifierProvider(create: (context) => CustomerGlobalState()),

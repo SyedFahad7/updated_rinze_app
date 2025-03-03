@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_fonts.dart';
 
@@ -13,6 +17,43 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  final TextEditingController _feedbackController = TextEditingController();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+
+  @override
+  void dispose() {
+    _feedbackController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitDeletionRequest(String reason, String feedback) async {
+    final String? storedToken = await secureStorage.read(key: 'Rin8k1H2mZ');
+    final String url = '${dotenv.env['API_URL']}/deletionRequest/send';
+
+    if (storedToken != null) {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $storedToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'reasonTitle': reason,
+          'reasonDescription': feedback,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Deletion request submitted successfully');
+        _showSubmitDialog(context);
+      } else {
+        print('Failed to submit deletion request: ${response.statusCode}');
+      }
+    } else {
+      print('Token not found');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +126,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 Text(
                   'Do you have any feedback for us? We would love to hear from you (optional)',
                   style: TextStyle(
-                    color: AppColors.black.withValues(alpha: 0.5),
+                    color: AppColors.black.withOpacity(0.5),
                     fontFamily: AppFonts.fontFamilyPlusJakartaSans,
                     fontSize: AppFonts.fontSize12,
                     fontWeight: AppFonts.fontWeightRegular,
@@ -93,11 +134,12 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 ),
                 const SizedBox(height: 12),
                 TextField(
+                  controller: _feedbackController,
                   maxLines: 5,
                   decoration: InputDecoration(
                     hintText: 'Please share your feedback (Optional)',
                     hintStyle: TextStyle(
-                      color: AppColors.black.withValues(alpha: 0.6),
+                      color: AppColors.black.withOpacity(0.6),
                       fontFamily: AppFonts.fontFamilyPlusJakartaSans,
                       fontSize: AppFonts.fontSize14,
                       fontWeight: AppFonts.fontWeightRegular,
@@ -105,7 +147,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
-                        color: AppColors.black.withValues(alpha: 0.1),
+                        color: AppColors.black.withOpacity(0.1),
                       ),
                     ),
                   ),
@@ -113,7 +155,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    _showSubmitDialog(context);
+                    _submitDeletionRequest(
+                        widget.reason, _feedbackController.text);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.darkBlue,
@@ -184,7 +227,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 Text(
                   'We\'re sad to see you go, you\'ll hear from us soon on your registered email address.',
                   style: TextStyle(
-                    color: AppColors.black.withValues(alpha: 0.5),
+                    color: AppColors.black.withOpacity(0.5),
                     fontFamily: AppFonts.fontFamilyPlusJakartaSans,
                     fontSize: AppFonts.fontSize14,
                     fontWeight: AppFonts.fontWeightRegular,

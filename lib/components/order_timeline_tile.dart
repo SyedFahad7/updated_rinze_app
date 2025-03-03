@@ -62,6 +62,8 @@ class _OrderTimelineTileState extends State<OrderTimelineTile> {
           color: widget.isPast ? AppColors.thumbGrey : AppColors.black,
         ),
         endChild: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Center horizontally
+          crossAxisAlignment: CrossAxisAlignment.center, // Center vertically
           children: [
             Expanded(
               child: OrderTimelineCard(
@@ -72,7 +74,11 @@ class _OrderTimelineTileState extends State<OrderTimelineTile> {
             if (widget.showImage)
               Padding(
                 padding: const EdgeInsets.only(left: 16.0), // Add spacing
-                child: Image.asset(widget.imagePath),
+                child: Image.asset(
+                  widget.imagePath,
+                  width: 40.0, 
+                  height: 40.0, 
+                ),
               ),
           ],
         ),

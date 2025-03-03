@@ -126,16 +126,15 @@ class _LaundryTabState extends State<LaundryTab> {
     });
   }
 
-  void _onQuantityChanged(String productName, int quantity, item) {
-    // double productWeight = productWeights[productName.toLowerCase()] ?? 0.0;
+  void _onQuantityChanged(
+      String productName, int quantity, double productWeight) {
     int currentQuantity = productQuantities[productName] ?? 0;
     int newQuantity = currentQuantity + quantity;
-    double productWeight = (item as num?)?.toDouble() ?? 0.0;
+
     if (newQuantity < 0) {
       newQuantity = 0;
     }
-    print('item');
-    print(item);
+
     productQuantities[productName] = newQuantity;
     double newWeight = selectedWeight + (productWeight * quantity);
 
@@ -292,6 +291,9 @@ class _LaundryTabState extends State<LaundryTab> {
                       itemBuilder: (context, index) {
                         final item =
                             widget.laundryByKg[widget.category]['items'][index];
+                        double productWeight = (item['approx_weight'] is String)
+                            ? double.tryParse(item['approx_weight']) ?? 0.0
+                            : (item['approx_weight'] as num).toDouble();
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12.0),
                           child: ServiceItemRowKg(
@@ -307,7 +309,7 @@ class _LaundryTabState extends State<LaundryTab> {
                             serviceId: widget.serviceId,
                             onQuantityChanged: (quantity) {
                               _onQuantityChanged(item['item']['product_name'],
-                                  quantity, item['approx_weight']);
+                                  quantity, productWeight);
                             },
                             isWeightLimitReached: isWeightLimitReached,
                           ),
@@ -341,7 +343,7 @@ class _LaundryTabState extends State<LaundryTab> {
                             serviceId: widget.serviceId,
                             onQuantityChanged: (quantity) {
                               _onQuantityChanged(
-                                  item['product_name'], quantity, null);
+                                  item['product_name'], quantity, 0.0);
                             },
                           ),
                         );
